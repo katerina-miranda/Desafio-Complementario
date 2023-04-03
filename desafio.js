@@ -9,7 +9,7 @@ class ProductManager {
       console.log(`Error: Ya existe un prducto con el codigo ${code}`);
       return;
     }
-    const producto_nuevo = {
+    const productoNuevo = {
       id: ++ this.id,
       title: title,
       description: description,
@@ -18,10 +18,10 @@ class ProductManager {
       code: code,
       stock: stock || 25
     }
-    if(Object.values(producto_nuevo).includes(undefined)) {
+    if(Object.values(productoNuevo).includes(undefined)) {
       console.log('Error: todos los campos son obligatorios');
     } else {
-      this.products.push(producto_nuevo);
+      this.products.push(productoNuevo);
     }
   }
   getProducts () {
@@ -32,15 +32,15 @@ class ProductManager {
     if (idProduct) {
       return idProduct;
     } else {
-      console.log('Error: Not Found')
+      console.log('Error: Not found')
     }
   }
 }
 
 // casos de uso
 const manager = new ProductManager();
-manager.addProduct('Camiseta', 'camiseta de algodon', 1500, 'imagen01.jpg', 'CAM01', undefined)
-manager.addProduct('Pantalon', 'pantalon de lino', 3500, 'imagen02.jpg', 'PAN01', 8)
+manager.addProduct('Remera', 'remera de algodon', 5500, 'imagen01.jpg', 'REM01', undefined)
+manager.addProduct('Pantalon', 'pantalon de jean', 4500, 'imagen02.jpg', 'PAN01', 8)
 console.log(manager.getProductById(1).title);
 console.log(manager.getProductById(2).description);
 console.log(manager.getProducts());
