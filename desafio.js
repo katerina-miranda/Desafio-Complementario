@@ -9,6 +9,7 @@ class Product{
     this.id = product.id;
   }
 }
+
 class ProductManager{
   constructor(){
     this.products = [];
@@ -65,6 +66,7 @@ productManager.addProduct({
   code:'abc123',
   stock:25
 })
+
 console.log(productManager.getProducts());
 productManager.addProduct({
   title: 'producto prueba',
@@ -74,5 +76,6 @@ productManager.addProduct({
   code:'abc123',
   stock:25
 })
+
 console.log(productManager.getProductsById(1))
 productManager.getProductsById(4)
