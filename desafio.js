@@ -1,46 +1,78 @@
-class ProductManager {
-  constructor() {
+class Product{
+  constructor(product){
+    this.title = product.title;
+    this.description = product.description;
+    this.price = product.price;
+    this.thumbnail = product.thumbnail;
+    this.code = product.code;
+    this.stock = product.stock;
+    this.id = product.id;
+  }
+}
+class ProductManager{
+  constructor(){
     this.products = [];
-    this.id = 0;
   }
-  addProduct (title, description, price, thumbnail, code, stock) {
-    const foundCode = this.products.some (producto => producto.code === code);
-    if (foundCode) {
-      console.log(`Error: Ya existe un prducto con el codigo ${code}`);
-      return;
-    }
-    const productoNuevo = {
-      id: ++ this.id,
-      title: title,
-      description: description,
-      price: price || 200,
-      thumbnail: thumbnail,
-      code: code,
-      stock: stock || 25
-    }
-    if(Object.values(productoNuevo).includes(undefined)) {
-      console.log('Error: todos los campos son obligatorios');
+  addProduct(product){
+    if(this.checkProduct(product)){
+      this.products.push(new Product({
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        thumbnail: product.thumbnail,
+        code: product.code,
+        stock: product.stock,
+        id: this.generateId()
+      }));
+      console.log('Producto Agregado:', product);
     } else {
-      this.products.push(productoNuevo);
+      console.error('Error al agregar el producto', product);
     }
   }
-  getProducts () {
-    console.log(this.products);
+  deleteProduct(){
+    const deleteProduct = [productManager];
   }
-  getProductById (productoId) {
-    const idProduct = this.products.find(producto => producto.id === productoId); 
-    if (idProduct) {
-      return idProduct;
-    } else {
-      console.log('Error: Not found')
-    }
+  checkProduct(product){
+    return !this.getCode(product.code) && product.title && product.description && product.price && product.thumbnail && product.stock
+  }
+  getCode(code){
+    return this.products.find(product => product.code == code)
+  }
+  getProducts(){
+    return this.products;
+  }
+  getProductsById(id){
+    return this.products.find((product) => {
+      if(product.id === id){
+        return product
+      } else {
+        console.error('not found id:', id);
+      }
+    })
+  }
+  generateId(){
+    return this.products.length + 1;
   }
 }
 
-// casos de uso
-const manager = new ProductManager();
-manager.addProduct('Remera', 'remera de algodon', 5500, 'imagen01.jpg', 'REM01', undefined)
-manager.addProduct('Pantalon', 'pantalon de jean', 4500, 'imagen02.jpg', 'PAN01', 8)
-console.log(manager.getProductById(1).title);
-console.log(manager.getProductById(2).description);
-console.log(manager.getProducts());
+const productManager = new ProductManager();
+console.log(productManager.getProducts());
+productManager.addProduct({
+  title: 'producto prueba',
+  description:'Este es un producto prueba',
+  price:'200',
+  thumbnail:'Sin imagen',
+  code:'abc123',
+  stock:25
+})
+console.log(productManager.getProducts());
+productManager.addProduct({
+  title: 'producto prueba',
+  description:'Este es un producto prueba',
+  price:'200',
+  thumbnail:'Sin imagen',
+  code:'abc123',
+  stock:25
+})
+console.log(productManager.getProductsById(1))
+productManager.getProductsById(4)
