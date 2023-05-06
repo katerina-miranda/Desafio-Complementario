@@ -33,6 +33,7 @@ class ProductManager {
     //agregar un producto al arreglo de productos
     this.products.push(producto_nuevo);
     console.log('Producto agregado correctamente');
+    
     //guardar el arreglo de productos en el archivo
     fs.writeFile(this.path, JSON.stringify(this.products), (error) => {
       if (error) throw error;
