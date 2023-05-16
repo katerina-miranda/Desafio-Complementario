@@ -7,9 +7,9 @@ server.use(express.urlencoded({extend:true})); //Analizar los datos de formulari
 
 server.use(express.json()); //Analizar los datos JSON enviados en una solicitud HTTP
 
-// server.get('/saludo', (req, res) => { //get (obtener)
-//   res.send('Esta es la respuesta de servidor express'); 
-// });
+server.get('/saludo', (req, res) => { //get (obtener)
+  res.send('Esta es la respuesta de servidor express'); 
+});
 
 server.get('/products', async(req, res) => {
   const limite = req.query.limite; //Soporte para recibir por query param el valor ?limit= el cual recibirá un límite de resultados
