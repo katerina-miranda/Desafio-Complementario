@@ -1,7 +1,8 @@
-const fs = require('fs'); 
-const express = require('express'); //Se importa el módulo Express
-const PUERTO = 7500; //Se define el número del puerto en el que se ejecutará la aplicación
+import fs from 'fs';
+import express from 'express'; //Se importa el módulo Express
+
 const app = express(); //Se crea una instancia de la aplicación Express
+
 app.use(express.urlencoded({extended:true})); //Se utiliza el middleware urlencoded proporcionado por Express para analizar los datos de formulario enviados en una solicitud HTTP
 
 class ProductManager {
@@ -17,13 +18,11 @@ class ProductManager {
       console.log('Todos los campos son obligatorios');
       return;
     }
-
     //Validar que no se repita el campo "code"
     const codeRepetido = this.products.some(product => product.code === code); //some() comprueba si al menos un elemento del array cumple con la condición. Devuelve true/false
     if (codeRepetido) {
       console.log(`Existe un producto con el código ${code}`);
     }
-
     const producto_nuevo = {
       id: ++this.id,
       title: title,
@@ -33,7 +32,6 @@ class ProductManager {
       code: code,
       stock: stock
     }
-
     //Agregar un producto al arreglo de productos
     this.products.push(producto_nuevo);
     console.log('Producto agregado correctamente');
@@ -66,7 +64,7 @@ class ProductManager {
       console.log(product);
       return product;
     } else {
-      console.log('Producto no existe')
+      return res.status(404).send({status: 'error', error: 'Producto no existe'});;
     }
   }
 
@@ -75,8 +73,7 @@ class ProductManager {
     const products = JSON.parse(data);
     const index = products.findIndex(product => product.id === productId); //findIndex() devuelve el índice del primer elemento de un array que cumpla la condición. En caso contrario devuelve -1
     if (index === -1) {
-      console.log('Producto no encontrado');
-      return;
+      return res.status(404).send({status: 'error', error: 'Producto no encontrado'});
     }
     products[index][field] = updateData;
     //Actualizar el valor del campo en el objeto con el índice en el arreglo products al nuevo valor asignado
@@ -95,27 +92,24 @@ class ProductManager {
     const products = JSON.parse(data);
     const productoElimminado = products.findIndex(product => product.id === productIdToDelete);
     if (productoElimminado === -1) {
-      console.log(`No se encontro producto con el ID: ${productIdToDelete}`);
-      return;
+      return res.status(404).send({status: 'error', error: `No se encontró el producto con el ID: ${productIdToDelete}`});
     }
-
     products.splice(productIdToDelete, 1);
     fs.writeFile(this.path, JSON.stringify(products), err => {
       if(err) throw err;
-      console.log('Producto eliminado correctamente');
+      res.send({status: 'success', message: 'Producto eliminado correctamente'});
     })
   }
 }
 
-module.exports = ProductManager;
+export default ProductManager;
 
 //CASOS DE USO
 const manager = new ProductManager();
 manager.addProduct("Remera", "Remera Negra", 15000, "imagen1.jpg", "REM01", 1);
 manager.addProduct("Vestido", "Vestido Rojo", 20000, "imagen2.jpg", "VES01", 1);
-manager.addProduct("Buzo", "Buzo Blanco", 18000, "imagen3.jpg", "BUZ01", 1);
-console.log(manager.getProducts());
-manager.getProductId(3);
+console.log(manager.getProducts);
+manager.getProductId(1);
 console.log(manager.getProductId(2).description);
-manager.updateProduct(2, 'description', 'Buzo Rojo');
+manager.updateProduct(2, 'description', 'Vestido Bordó');
 //manager.deleteProduct(2);
